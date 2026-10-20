@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Sitemap: https://hititautosport.com/sitemap.xml

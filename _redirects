@@ -1,0 +1,11 @@
+# Keeps old Squarespace links (Google results, Instagram bios, shared links) working.
+/home                    /                   301
+/merchtent               /merch-tent         301
+/merchtent/*             /merch-tent         301
+/cart                    /merch-tent         301
+/hard-parts/*            /hard-parts         301
+/new-folder              /builds             301
+/upcoming-events         /                   302
+/upcoming-events/*       /                   302
+/search                  /                   301
+/about                   /about-us           301

@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Owner Portal — Hit It Autosport</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1d2a34">
+<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body class="admin">
+<header class="ad-top">
+  <a class="ad-brand" href="index.html">
+    <img src="images/logo-badge-sm.png" alt="Hit It Autosport" width="480" height="243">
+    <span>Owner Portal</span>
+  </a>
+  <div class="ad-who" id="ad-who" hidden>
+    <span id="ad-email"></span>
+    <a class="btn ghost small" href="index.html" target="_blank" rel="noopener">View site</a>
+    <button class="btn small" type="button" id="ad-signout">Sign out</button>
+  </div>
+</header>
+
+<main class="ad-main" id="main">
+
+  <!-- Sign in -->
+  <section class="ad-card ad-signin" id="view-signin" hidden>
+    <h1>Sign in</h1>
+    <p class="muted">Use your Hit It HQ login.</p>
+    <form id="signin-form" class="ad-form" novalidate>
+      <div class="field"><label for="si-email">Email</label><input id="si-email" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="si-pass">Password</label><input id="si-pass" type="password" autocomplete="current-password"></div>
+      <button class="btn orange block" type="submit" id="si-btn">Sign in</button>
+      <button class="linkish" type="button" id="si-link">Email me a sign-in link instead</button>
+      <p class="form-msg" id="si-msg" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <section class="ad-card" id="view-denied" hidden>
+    <h1>Not an owner account</h1>
+    <p class="muted">You're signed in, but this login can't edit the website. Sign out and use your Hit It HQ login.</p>
+  </section>
+
+  <p class="muted" id="view-loading">Loading…</p>
+
+  <!-- Portal -->
+  <div id="view-app" hidden>
+    <nav class="ad-tabs" role="tablist" aria-label="Owner sections">
+      <button role="tab" type="button" id="tab-parts" aria-controls="panel-parts" aria-selected="true">Parts</button>
+      <button role="tab" type="button" id="tab-builds" aria-controls="panel-builds" aria-selected="false">Builds</button>
+      <button role="tab" type="button" id="tab-team" aria-controls="panel-team" aria-selected="false">Team</button>
+      <button role="tab" type="button" id="tab-pages" aria-controls="panel-pages" aria-selected="false">Pages</button>
+      <button role="tab" type="button" id="tab-business" aria-controls="panel-business" aria-selected="false">Business</button>
+      <button role="tab" type="button" id="tab-shop" aria-controls="panel-shop" aria-selected="false">Shop</button>
+      <button role="tab" type="button" id="tab-links" aria-controls="panel-links" aria-selected="false">Links</button>
+    </nav>
+
+    <!-- Hard parts -->
+    <section role="tabpanel" id="panel-parts" aria-labelledby="tab-parts">
+      <div id="parts-list-view">
+        <div class="ad-head">
+          <div><h1>Hard parts</h1><p class="muted">What shows on the Hard Parts page. Changes appear on the site within a minute.</p></div>
+          <button class="btn orange" type="button" id="part-new">Add a part</button>
+        </div>
+        <div id="parts-list" class="ad-list"></div>
+      </div>
+
+      <form id="part-form" class="ad-form ad-editor" hidden novalidate>
+        <div class="ad-head">
+          <div><button class="linkish" type="button" id="pf-back">Back to all parts</button><h1 id="pf-title">Add a part</h1></div>
+        </div>
+
+        <div class="ad-card">
+          <div class="field"><label for="pf-name">Part name</label><input id="pf-name" maxlength="160" required placeholder="Crown Victoria Rear Brake (S550) Axle Brackets"></div>
+          <div class="field"><label for="pf-desc">Description and fitment</label><textarea id="pf-desc" maxlength="4000" rows="5" placeholder="What it fits, what's included, install notes."></textarea></div>
+        </div>
+
+        <div class="ad-card">
+          <h2>Price</h2>
+          <div class="seg" role="radiogroup" aria-label="Pricing">
+            <label><input type="radio" name="pf-mode" value="one" checked> One price</label>
+            <label><input type="radio" name="pf-mode" value="versions"> Several versions</label>
+          </div>
+          <div id="pf-one" class="ad-grid3">
+            <div class="field"><label for="pf-price">Price ($)</label><input id="pf-price" inputmode="decimal" placeholder="150.00"></div>
+            <div class="field"><label for="pf-was">Was price ($) <span class="muted">optional, shows a sale tag</span></label><input id="pf-was" inputmode="decimal" placeholder=""></div>
+            <div class="field"><label for="pf-ship">Shipping ($)</label><input id="pf-ship" inputmode="decimal" placeholder="15.00"></div>
+          </div>
+          <div id="pf-versions" hidden>
+            <p class="muted">Customers pick one of these from a dropdown. Leave a version's shipping blank to use the default.</p>
+            <div class="vrow vhead" aria-hidden="true"><span>Version</span><span>Price ($)</span><span>Shipping ($)</span><span></span></div>
+            <div id="pf-vlist"></div>
+            <div class="btn-row"><button class="btn ghost small" type="button" id="pf-vadd">Add a version</button></div>
+            <div class="field narrow"><label for="pf-ship2">Default shipping ($)</label><input id="pf-ship2" inputmode="decimal" placeholder="15.00"></div>
+          </div>
+        </div>
+
+        <div class="ad-card">
+          <h2>Photos</h2>
+          <p class="muted">The first photo is the main one. Photos are shrunk automatically so they load fast.</p>
+          <div id="pf-photos" class="ad-photos"></div>
+          <label class="btn ghost small file-btn">Add photos<input id="pf-files" type="file" accept="image/*" multiple></label>
+          <p class="form-msg" id="pf-upmsg" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="ad-card">
+          <h2>Status</h2>
+          <label class="switch"><input type="checkbox" id="pf-active" checked><span>Show on the website</span></label>
+          <label class="switch"><input type="checkbox" id="pf-sold"><span>Sold out (shows, but can't be bought)</span></label>
+        </div>
+
+        <div class="ad-actions">
+          <button class="btn orange" type="submit" id="pf-save">Save part</button>
+          <button class="btn ghost" type="button" id="pf-cancel">Cancel</button>
+          <span class="spacer"></span>
+          <button class="btn danger" type="button" id="pf-delete" hidden>Delete part</button>
+        </div>
+        <div class="ad-confirm" id="pf-confirm" hidden>
+          <p><strong>Delete this part for good?</strong> Its photos are removed too. This can't be undone.</p>
+          <div class="btn-row"><button class="btn danger" type="button" id="pf-confirm-yes">Yes, delete it</button><button class="btn ghost" type="button" id="pf-confirm-no">Keep it</button></div>
+        </div>
+        <p class="form-msg" id="pf-msg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- Builds -->
+    <section role="tabpanel" id="panel-builds" aria-labelledby="tab-builds" hidden>
+      <div id="builds-list-view" class="ad-stack">
+        <div class="ad-head">
+          <div><h1>Builds</h1><p class="muted">Your race and project cars. Each one gets its own page and shows in the menu.</p></div>
+          <button class="btn orange" type="button" id="build-new">Add a build</button>
+        </div>
+        <div id="builds-list" class="ad-list"></div>
+      </div>
+      <form id="build-form" class="ad-form ad-editor" hidden novalidate>
+        <div class="ad-head"><div><button class="linkish" type="button" id="bf-back">Back to all builds</button><h1 id="bf-title">Add a build</h1></div></div>
+        <div class="ad-card">
+          <div class="field"><label for="bf-name">Build name</label><input id="bf-name" maxlength="80" placeholder="96 Autocross Mustang"></div>
+          <div class="field"><label for="bf-blurb">Short description</label><textarea id="bf-blurb" rows="3" maxlength="600" placeholder="One or two sentences that show under the name."></textarea></div>
+        </div>
+        <div class="ad-card">
+          <h2>Spec sheet</h2>
+          <p class="muted">Leave empty to hide the spec sheet on this build's page.</p>
+          <div class="vrow vhead two" aria-hidden="true"><span>Item</span><span>Details</span><span></span></div>
+          <div id="bf-specs"></div>
+          <div class="btn-row"><button class="btn ghost small" type="button" id="bf-spec-add">Add a spec</button></div>
+        </div>
+        <div class="ad-card">
+          <h2>Photos</h2>
+          <p class="muted">The first photo is the cover on the Builds page.</p>
+          <div id="bf-photos" class="ad-photos"></div>
+          <label class="btn ghost small file-btn">Add photos<input id="bf-files" type="file" accept="image/*" multiple></label>
+          <p class="form-msg" id="bf-upmsg" role="status" aria-live="polite"></p>
+        </div>
+        <div class="ad-card"><label class="switch"><input type="checkbox" id="bf-active" checked><span>Show on the website</span></label></div>
+        <div class="ad-actions">
+          <button class="btn orange" type="submit" id="bf-save">Save build</button>
+          <button class="btn ghost" type="button" id="bf-cancel">Cancel</button>
+          <span class="spacer"></span>
+          <button class="btn danger" type="button" id="bf-delete" hidden>Delete build</button>
+        </div>
+        <div class="ad-confirm" id="bf-confirm" hidden>
+          <p><strong>Delete this build for good?</strong> Its page and photos are removed. This can't be undone.</p>
+          <div class="btn-row"><button class="btn danger" type="button" id="bf-confirm-yes">Yes, delete it</button><button class="btn ghost" type="button" id="bf-confirm-no">Keep it</button></div>
+        </div>
+        <p class="form-msg" id="bf-msg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- Team -->
+    <section role="tabpanel" id="panel-team" aria-labelledby="tab-team" hidden>
+      <div id="team-list-view" class="ad-stack">
+        <div class="ad-head">
+          <div><h1>Team</h1><p class="muted">The people on the Team page, in this order.</p></div>
+          <button class="btn orange" type="button" id="member-new">Add a person</button>
+        </div>
+        <div id="team-admin-list" class="ad-list"></div>
+      </div>
+      <form id="member-form" class="ad-form ad-editor" hidden novalidate>
+        <div class="ad-head"><div><button class="linkish" type="button" id="mf-back">Back to the team</button><h1 id="mf-title">Add a person</h1></div></div>
+        <div class="ad-card">
+          <div class="ad-grid2">
+            <div class="field"><label for="mf-name">Name</label><input id="mf-name" maxlength="80"></div>
+            <div class="field"><label for="mf-role">Role</label><input id="mf-role" maxlength="120" placeholder="Driver, fabrication"></div>
+          </div>
+          <div class="field"><label for="mf-bio">Bio</label><textarea id="mf-bio" rows="5" maxlength="2000"></textarea></div>
+          <div class="field"><label for="mf-creds">Wins and credentials <span class="muted">one per line, optional</span></label><textarea id="mf-creds" rows="3" maxlength="1000" placeholder="2014 NCAC Champion, CP class"></textarea></div>
+        </div>
+        <div class="ad-card">
+          <h2>Photo</h2>
+          <div id="mf-photos" class="ad-photos"></div>
+          <label class="btn ghost small file-btn">Choose a photo<input id="mf-files" type="file" accept="image/*"></label>
+          <p class="form-msg" id="mf-upmsg" role="status" aria-live="polite"></p>
+        </div>
+        <div class="ad-actions">
+          <button class="btn orange" type="submit" id="mf-save">Save person</button>
+          <button class="btn ghost" type="button" id="mf-cancel">Cancel</button>
+          <span class="spacer"></span>
+          <button class="btn danger" type="button" id="mf-delete" hidden>Remove person</button>
+        </div>
+        <div class="ad-confirm" id="mf-confirm" hidden>
+          <p><strong>Remove this person from the Team page?</strong></p>
+          <div class="btn-row"><button class="btn danger" type="button" id="mf-confirm-yes">Yes, remove</button><button class="btn ghost" type="button" id="mf-confirm-no">Keep</button></div>
+        </div>
+        <p class="form-msg" id="mf-msg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- Pages -->
+    <section role="tabpanel" id="panel-pages" aria-labelledby="tab-pages" hidden>
+      <div class="ad-head"><div><h1>Pages</h1><p class="muted">Turn a page off and it disappears from the menu. Anyone with an old link sees a "back soon" message. The home page is always on.</p></div></div>
+      <div class="ad-card" id="pages-list"></div>
+      <p class="form-msg" id="pages-msg" role="status" aria-live="polite"></p>
+
+      <h2 class="ad-sub">Page text</h2>
+      <form class="ad-card ad-form" id="home-form" novalidate>
+        <h2>Home page</h2>
+        <div class="field"><label for="hm-tagline">Small line above the headline</label><input id="hm-tagline" maxlength="60"></div>
+        <div class="field"><label for="hm-headline">Headline</label><input id="hm-headline" maxlength="120"></div>
+        <div class="field"><label for="hm-lede">Intro sentence</label><textarea id="hm-lede" rows="3" maxlength="400"></textarea></div>
+        <button class="btn orange" type="submit">Save home page</button>
+        <p class="form-msg" id="hm-status" role="status" aria-live="polite"></p>
+      </form>
+      <form class="ad-card ad-form" id="about-form" novalidate>
+        <h2>About Us</h2>
+        <div class="field"><label for="ab-body">Text <span class="muted">leave a blank line between paragraphs</span></label><textarea id="ab-body" rows="8" maxlength="6000"></textarea></div>
+        <button class="btn orange" type="submit">Save About Us</button>
+        <p class="form-msg" id="ab-status" role="status" aria-live="polite"></p>
+      </form>
+      <form class="ad-card ad-form" id="cad-form" novalidate>
+        <h2>CAD &amp; 3D Printing</h2>
+        <div class="field"><label for="cd-intro">Intro</label><textarea id="cd-intro" rows="3" maxlength="800"></textarea></div>
+        <div class="ad-grid2">
+          <div class="field"><label for="cd-rate">Rate</label><input id="cd-rate" maxlength="40" placeholder="$20–$55/hr"></div>
+          <div class="field"><label for="cd-rate-note">Rate note</label><input id="cd-rate-note" maxlength="200"></div>
+        </div>
+        <div class="field"><label for="cd-services">Services <span class="muted">one per line</span></label><textarea id="cd-services" rows="6" maxlength="1500"></textarea></div>
+        <h3 class="ad-h3">Recent work photos</h3>
+        <div id="cd-photos" class="ad-photos"></div>
+        <label class="btn ghost small file-btn">Add photos<input id="cd-files" type="file" accept="image/*" multiple></label>
+        <p class="form-msg" id="cd-upmsg" role="status" aria-live="polite"></p>
+        <button class="btn orange" type="submit">Save CAD page</button>
+        <p class="form-msg" id="cd-status" role="status" aria-live="polite"></p>
+      </form>
+      <form class="ad-card ad-form" id="guides-form" novalidate>
+        <h2>Coyote Swap Guides</h2>
+        <p class="muted">Leave the link blank to show a guide as "In progress".</p>
+        <div id="gd-list" class="ad-stack"></div>
+        <div class="btn-row"><button class="btn ghost small" type="button" id="gd-add">Add a guide</button></div>
+        <button class="btn orange" type="submit">Save guides</button>
+        <p class="form-msg" id="gd-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- Business -->
+    <section role="tabpanel" id="panel-business" aria-labelledby="tab-business" hidden>
+      <div class="ad-head"><div><h1>Business info</h1><p class="muted">Shows in the menu, the footer of every page and the Contact page.</p></div></div>
+      <form class="ad-card ad-form" id="biz-form" novalidate>
+        <div class="ad-grid2">
+          <div class="field"><label for="bz-phone">Phone</label><input id="bz-phone" type="tel" maxlength="30" placeholder="(336) 410-1861"></div>
+          <div class="field"><label for="bz-email">Email</label><input id="bz-email" type="email" maxlength="120"></div>
+        </div>
+        <div class="field"><label for="bz-city">Town</label><input id="bz-city" maxlength="80" placeholder="Thomasville, NC"></div>
+        <h2>Shop hours</h2>
+        <p class="muted">Leave a day blank to show it as Closed.</p>
+        <div id="bz-hours" class="hours-edit"></div>
+        <h2>Social links</h2>
+        <div class="field"><label for="bz-ig">Instagram</label><input id="bz-ig" type="url" maxlength="300" placeholder="https://instagram.com/…"></div>
+        <div class="field"><label for="bz-tt">TikTok</label><input id="bz-tt" type="url" maxlength="300" placeholder="https://www.tiktok.com/@…"></div>
+        <div class="field"><label for="bz-fb">Facebook</label><input id="bz-fb" type="url" maxlength="300" placeholder="https://www.facebook.com/…"></div>
+        <h2>Contact form</h2>
+        <div class="field"><label for="bz-form">Web3Forms access key <span class="muted">free at web3forms.com; blank opens the visitor's email app instead</span></label><input id="bz-form" maxlength="80" autocomplete="off"></div>
+        <button class="btn orange" type="submit">Save business info</button>
+        <p class="form-msg" id="bz-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- Shop & banner -->
+    <section role="tabpanel" id="panel-shop" aria-labelledby="tab-shop" hidden>
+      <div class="ad-head"><div><h1>Shop &amp; banner</h1><p class="muted">Pause orders, post an announcement across the top of every page, and set merch shipping.</p></div></div>
+      <form class="ad-card ad-form" id="shop-form" novalidate>
+        <h2>Orders</h2>
+        <label class="switch"><input type="checkbox" id="sh-open"><span>Taking orders</span></label>
+        <div class="field"><label for="sh-msg">Message when orders are paused</label><textarea id="sh-msg" rows="2" maxlength="300"></textarea></div>
+        <button class="btn orange" type="submit">Save orders</button>
+        <p class="form-msg" id="sh-status" role="status" aria-live="polite"></p>
+      </form>
+      <form class="ad-card ad-form" id="banner-form" novalidate>
+        <h2>Banner</h2>
+        <label class="switch"><input type="checkbox" id="bn-on"><span>Show the banner</span></label>
+        <div class="field"><label for="bn-text">Banner text</label><input id="bn-text" maxlength="200" placeholder="Back from Ford Fest! New shirts drop Friday."></div>
+        <div class="field"><label for="bn-link">Link (optional)</label><input id="bn-link" maxlength="300" placeholder="merch-tent.html or https://…"></div>
+        <div class="site-banner preview" id="bn-preview" hidden></div>
+        <button class="btn orange" type="submit">Save banner</button>
+        <p class="form-msg" id="bn-status" role="status" aria-live="polite"></p>
+      </form>
+      <form class="ad-card ad-form" id="ship-form" novalidate>
+        <h2>Merch shipping</h2>
+        <div class="field narrow"><label for="ms-flat">Flat shipping for any merch order ($)</label><input id="ms-flat" inputmode="decimal"></div>
+        <p class="muted">Hard-part shipping is set on each part.</p>
+        <button class="btn orange" type="submit">Save shipping</button>
+        <p class="form-msg" id="ms-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- Links -->
+    <section role="tabpanel" id="panel-links" aria-labelledby="tab-links" hidden>
+      <div class="ad-head"><div><h1>Orders &amp; links</h1><p class="muted">Where everything else lives.</p></div></div>
+      <div class="ad-card ad-links">
+        <a href="https://dashboard.stripe.com/payments" target="_blank" rel="noopener"><strong>Orders and payments</strong><span>Stripe: every paid order with the customer's address. Hard parts ship from here.</span></a>
+        <a href="https://printify.com/app/orders" target="_blank" rel="noopener"><strong>Merch orders</strong><span>Printify: approve, track or cancel shirt orders.</span></a>
+        <a href="https://printify.com/app/store/products" target="_blank" rel="noopener"><strong>Merch designs and prices</strong><span>Printify: add or change shirts. The Merch Tent updates on its own.</span></a>
+        <a href="https://dash.cloudflare.com" target="_blank" rel="noopener"><strong>Website hosting</strong><span>Cloudflare: deployments, domain and secret keys.</span></a>
+        <a href="https://supabase.com/dashboard/project/fwikgcxmdibizkconcok" target="_blank" rel="noopener"><strong>Database</strong><span>Supabase (Hit It HQ): where this portal saves everything.</span></a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/admin.js"></script>
+<script src="assets/admin-content.js"></script>
+</body>
+</html>

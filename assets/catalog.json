@@ -1,0 +1,56 @@
+{
+  "_read_me": "Hard parts and shipping. Prices are in dollars. The checkout reads this file, so the price here is what customers pay. Shipping numbers are starting guesses: change them to what it really costs you to ship.",
+  "_options_how_to": "To sell a part in different versions, give it an options list: [{ \"label\": \"Kit name\", \"price\": 180.00, \"shipping\": 15.00 }, ...]. Customers pick from a dropdown and pay that option's price. shipping on an option is optional; leave it off to use the part's shipping. Keep each label unique.",
+
+  "shipping": {
+    "merchFlat": 6.00,
+    "merchNote": "One flat charge when the cart has any merch, no matter how many shirts.",
+    "partsNote": "Each hard part adds its own shipping below, times the quantity."
+  },
+
+  "parts": [
+    {
+      "id": "crown-vic-s550-brackets",
+      "name": "Crown Victoria Rear Brake (S550) Axle Brackets",
+      "fit": "Mount Crown Vic rear calipers on an S550 axle.",
+      "options": [
+        { "label": "Bracket set", "price": 180.00 }
+      ],
+      "shipping": 15.00,
+      "image": "images/parts/crown-vic-s550-brackets.jpg"
+    },
+    {
+      "id": "ranger-epb-brackets",
+      "name": "Ranger Electric Parking Brake Axle Brackets",
+      "fit": "Brackets for running an electric parking brake on a Ranger axle.",
+      "price": 150.00,
+      "shipping": 15.00,
+      "image": "images/parts/ranger-epb-brackets.jpg"
+    },
+    {
+      "id": "visor-hook-passenger",
+      "name": "94–04 Mustang Passenger Sun Visor Steering Wheel Hook",
+      "fit": "Passenger-side visor hook for storing a removable steering wheel. 1994–2004 Mustang.",
+      "price": 5.00,
+      "shipping": 4.00,
+      "image": "images/parts/visor-hook-passenger.jpg"
+    },
+    {
+      "id": "visor-hook-mount",
+      "name": "94–04 Steering Wheel Hook Visor Mount",
+      "fit": "Visor mount for a steering wheel hook. 1994–2004 Mustang.",
+      "price": 12.00,
+      "wasPrice": 15.00,
+      "shipping": 4.00,
+      "image": "images/parts/visor-hook-mount.jpg"
+    },
+    {
+      "id": "touareg-roof-rack",
+      "name": "Touareg Roof Rack Brackets",
+      "fit": "Roof rack brackets for the VW Touareg.",
+      "price": 60.00,
+      "shipping": 10.00,
+      "image": "images/parts/touareg-roof-rack.jpg"
+    }
+  ]
+}
