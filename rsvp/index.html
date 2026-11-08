@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>RSVP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FBF8F3;--card:#fff;--ink:#2E2A26;--muted:#8A8178;--line:#ECE4D8;--sage:#6F8470;--blush:#C08A78;--blush-soft:#F6E9E3;--red:#B5523F}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,sans-serif}
+button,input,textarea{font:inherit;color:inherit}
+.wrap{max-width:520px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 32px) 20px calc(env(safe-area-inset-bottom) + 40px)}
+.top{text-align:center;margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:44px;line-height:1.05;margin:8px 0 6px}
+.honoree{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:22px;color:var(--blush)}
+.details{color:var(--muted);font-size:15px;margin-top:10px}
+.rule{width:60px;height:1px;background:var(--blush);margin:18px auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+label{display:block;font-size:13px;color:var(--muted);font-weight:500;margin:0 0 6px}
+.f{margin-bottom:16px}
+input[type=text],input[type=tel],textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;min-height:48px}
+textarea{min-height:84px;resize:vertical}
+input:focus,textarea:focus{outline:2px solid var(--blush-soft);border-color:var(--blush)}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice button{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:14px 10px;cursor:pointer;font-weight:600;font-size:15px}
+.choice button.on.yes{border-color:var(--sage);background:#E7EDE6;color:var(--sage)}
+.choice button.on.no{border-color:var(--blush);background:var(--blush-soft);color:#8a5a4b}
+.step{display:flex;align-items:center;gap:14px}
+.step button{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:22px;cursor:pointer}
+.step b{font-size:22px;min-width:28px;text-align:center}
+.submit{width:100%;background:var(--ink);color:#fff;border:0;border-radius:14px;padding:15px;font-weight:600;font-size:16px;cursor:pointer;margin-top:4px}
+.submit:disabled{opacity:.55}
+.err{color:var(--red);font-size:14px;margin:10px 0 0;min-height:1em}
+.hide{display:none}
+.done{text-align:center;padding:28px 20px}
+.done h2{font-family:"Cormorant Garamond",serif;font-size:34px;margin:6px 0}
+.done p{color:var(--muted)}
+.link{background:none;border:0;color:var(--blush);text-decoration:underline;cursor:pointer;padding:0;font-size:14px}
+.small{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="eyebrow" id="eyebrow">Kindly reply</div>
+    <h1 id="title">RSVP</h1>
+    <div class="honoree" id="honoree"></div>
+    <div class="details" id="details"></div>
+    <div class="rule"></div>
+  </div>
+
+  <div class="card" id="closed" hidden><p style="margin:0;text-align:center" id="closedText">RSVPs aren't open yet. Check back soon!</p></div>
+
+  <form class="card" id="form" novalidate hidden>
+    <div class="f"><label for="name">Your name</label><input type="text" id="name" autocomplete="name" maxlength="120" placeholder="First and last name"></div>
+    <div class="f"><label>Will you be there?</label>
+      <div class="choice"><button type="button" class="yes" data-a="yes">Joyfully accepts</button><button type="button" class="no" data-a="no">Regretfully declines</button></div></div>
+    <div id="yesOnly" class="hide">
+      <div class="f"><label>How many in your party, including you?</label>
+        <div class="step"><button type="button" data-s="-1" aria-label="Fewer">−</button><b id="party">1</b><button type="button" data-s="1" aria-label="More">+</button></div></div>
+      <div class="f hide" id="namesRow"><label for="others">Names of everyone else coming</label><input type="text" id="others" maxlength="500"></div>
+      <div class="f hide" id="mealRow"><label for="meal">Meal choice</label><input type="text" id="meal" maxlength="200"></div>
+      <div class="f"><label for="dietary">Food allergies or dietary needs (optional)</label><input type="text" id="dietary" maxlength="300"></div>
+    </div>
+    <div class="f"><label for="contact">Phone or email (optional, in case we need to reach you)</label><input type="text" id="contact" maxlength="200" autocomplete="tel"></div>
+    <div class="f"><label for="message" id="noteLabel">Note to the couple (optional)</label><textarea id="message" maxlength="1000"></textarea></div>
+    <button class="submit" id="send" type="submit">Send RSVP</button>
+    <div class="err" id="err" role="alert"></div>
+  </form>
+
+  <div class="card done hide" id="thanks">
+    <div class="eyebrow">Received</div>
+    <h2 id="thanksTitle">Thank you!</h2>
+    <p id="thanksText">Your RSVP is in.</p>
+    <button class="link" id="again" type="button">Need to change your answer? Send a new RSVP</button>
+  </div>
+</div>
+
+<script>
+/* ===== Event settings: edit these ===== */
+const EVENTS = {
+  shower: {
+    open: true,
+    eyebrow: 'You’re invited to a',
+    title: 'Bridal Shower',
+    honoree: '',            // e.g. 'Honoring Jane Doe'
+    date: '2027-03-13', time: '', place: '',
+    replyBy: '',            // e.g. '2027-02-27'
+    askNames: true, askMeal: false,
+    noteLabel: 'Note to the bride-to-be (optional)'
+  },
+  wedding: {
+    open: false,            // flip to true when wedding RSVPs open
+    eyebrow: 'Please join us for',
+    title: 'Our Wedding',
+    honoree: '',
+    date: '2027-11-06', time: '', place: '',
+    replyBy: '',
+    askNames: true, askMeal: false,
+    noteLabel: 'Note to the couple (optional)'
+  }
+};
+const API = 'https://osbjpkhxerztakdqdyql.supabase.co/rest/v1/rpc/wedding_rsvp';
+const KEY = 'sb_publishable_n8WaICi5F2t4cLCTBmgtMA_8AdahHoL'; // public key: can only submit RSVPs
+/* ====================================== */
+
+const $ = s => document.querySelector(s);
+const params = new URLSearchParams(location.search);
+const eventKey = EVENTS[params.get('e')] ? params.get('e') : 'shower';
+const ev = EVENTS[eventKey];
+let attending = null, party = 1;
+
+function nice(d, t){ if(!d) return ''; const x = new Date(d + 'T' + (t || '12:00'));
+  let s = x.toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+  if (t) s += ' at ' + x.toLocaleTimeString(undefined, {hour:'numeric', minute:'2-digit'}); return s; }
+
+document.title = ev.title + ' RSVP';
+$('#eyebrow').textContent = ev.eyebrow;
+$('#title').textContent = ev.title;
+$('#honoree').textContent = ev.honoree;
+const det = [nice(ev.date, ev.time), ev.place].filter(Boolean);
+if (ev.replyBy) det.push('Please reply by ' + nice(ev.replyBy).replace(/,? \d{4}$/, ''));
+$('#details').innerHTML = det.map(x => x.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))).join('<br>');
+if (!ev.open) { $('#closed').hidden = false; } else { $('#form').hidden = false; }
+$('#namesRow').classList.toggle('hide', !ev.askNames);
+$('#mealRow').classList.toggle('hide', !ev.askMeal);
+if (ev.noteLabel) $('#noteLabel').textContent = ev.noteLabel;
+
+document.querySelectorAll('[data-a]').forEach(b => b.addEventListener('click', () => {
+  attending = b.dataset.a === 'yes';
+  document.querySelectorAll('[data-a]').forEach(x => x.classList.toggle('on', x === b));
+  $('#yesOnly').classList.toggle('hide', !attending);
+  $('#err').textContent = '';
+}));
+document.querySelectorAll('[data-s]').forEach(b => b.addEventListener('click', () => {
+  party = Math.max(1, Math.min(20, party + Number(b.dataset.s))); $('#party').textContent = party;
+}));
+
+$('#form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const name = $('#name').value.trim();
+  if (!name) { $('#err').textContent = 'Please enter your name.'; $('#name').focus(); return; }
+  if (attending === null) { $('#err').textContent = 'Please let us know if you can make it.'; return; }
+  const btn = $('#send'); btn.disabled = true; btn.textContent = 'Sending…'; $('#err').textContent = '';
+  const body = {
+    p_event: eventKey, p_name: name, p_attending: attending, p_party_size: attending ? party : 0,
+    p_guest_names: attending ? $('#others').value : '', p_meal: attending ? $('#meal').value : '',
+    p_dietary: attending ? $('#dietary').value : '', p_message: $('#message').value, p_contact: $('#contact').value
+  };
+  try {
+    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: KEY }, body: JSON.stringify(body) });
+    if (!r.ok) { let m = ''; try { m = (await r.json()).message || ''; } catch (_) {}
+      throw new Error(/try again|name|choose/i.test(m) ? m : 'Something went wrong sending your RSVP. Please try again.'); }
+    $('#form').hidden = true; $('#thanks').classList.remove('hide');
+    $('#thanksTitle').textContent = attending ? 'Can’t wait to see you!' : 'We’ll miss you!';
+    $('#thanksText').textContent = attending
+      ? `Thanks, ${name.split(' ')[0]}. We have you down for ${party} ${party === 1 ? 'person' : 'people'}.`
+      : `Thanks for letting us know, ${name.split(' ')[0]}.`;
+    window.scrollTo(0, 0);
+  } catch (err) {
+    $('#err').textContent = err.message && !/fetch/i.test(err.message) ? err.message : 'Couldn’t reach the RSVP service. Check your connection and try again.';
+  } finally { btn.disabled = false; btn.textContent = 'Send RSVP'; }
+});
+$('#again').addEventListener('click', () => { $('#thanks').classList.add('hide'); $('#form').hidden = false; });
+</script>
+</body>
+</html>
