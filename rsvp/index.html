@@ -41,6 +41,7 @@ input:focus,textarea:focus{outline:2px solid var(--blush-soft);border-color:var(
 .done p{color:var(--muted)}
 .link{background:none;border:0;color:var(--blush);text-decoration:underline;cursor:pointer;padding:0;font-size:14px}
 .small{font-size:13px;color:var(--muted)}
+.details .note{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:19px;color:var(--ink);margin-top:10px}
 </style>
 </head>
 <body>
@@ -88,7 +89,9 @@ const EVENTS = {
     eyebrow: 'You’re invited to a',
     title: 'Bridal Shower',
     honoree: 'Honoring Savannah Thomason',
-    date: '2027-03-13', time: '', place: '6329 Unity St., Unit F, Thomasville, NC 27360',
+    date: '2027-03-13', time: '', timeText: '10:00 AM – 12:00 PM',
+    place: '6329 Unity St., Unit F, Thomasville, NC 27360',
+    note: 'Croissant sandwiches and doughnuts provided',
     replyBy: '2027-03-01',
     askNames: true, askMeal: false,
     noteLabel: 'Note to the bride-to-be (optional)'
@@ -122,9 +125,11 @@ document.title = ev.title + ' RSVP';
 $('#eyebrow').textContent = ev.eyebrow;
 $('#title').textContent = ev.title;
 $('#honoree').textContent = ev.honoree;
-const det = [nice(ev.date, ev.time), ev.place].filter(Boolean);
+const det = [nice(ev.date, ev.time) + (ev.timeText ? '<br>' + ev.timeText : ''), ev.place].filter(Boolean);
 if (ev.replyBy) det.push('Please reply by ' + nice(ev.replyBy).replace(/,? \d{4}$/, ''));
-$('#details').innerHTML = det.map(x => x.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))).join('<br>');
+const escH = x => String(x).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+$('#details').innerHTML = det.map(x => escH(x).replace(/&lt;br&gt;/g, '<br>')).join('<br>')
+  + (ev.note ? '<div class="note">' + escH(ev.note) + '</div>' : '');
 if (!ev.open) { $('#closed').hidden = false; } else { $('#form').hidden = false; }
 $('#namesRow').classList.toggle('hide', !ev.askNames);
 $('#mealRow').classList.toggle('hide', !ev.askMeal);
